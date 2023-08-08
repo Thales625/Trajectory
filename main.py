@@ -124,28 +124,25 @@ plt.style.use("dark_background")
 
 fig, ax = plt.subplots(1, 1)
 
-
-max_pho = interp(rb, altitude_data, density_data)
+max_pho = interp(0, altitude_data, density_data)
 h = 0
+list_color_atm = []
 while True:
-    radius = rb + h
-    pho = interp(radius, altitude_data, density_data)
-    color = Vector3(255 * float(pho / max_pho), 0, 0)
-    ax.add_patch(plt.Circle((0, 0), radius, color=tuple(color.normalize()))) # Atm 60km
-    h+=10
+    pho = interp(h, altitude_data, density_data)
+    blue = min(1, .05 + float(pho / max_pho))
+    list_color_atm.append((rb+h, (0, 0, blue)))
+    h+=1000
     if pho <= 0.01: break
-    
 
-# ax.add_patch(plt.Circle((0, 0), rb+60000, color=(0, 0, .2))) # Atm 60km
-# ax.add_patch(plt.Circle((0, 0), rb+20000, color=(0, 0, .25))) # Atm 20km
-# ax.add_patch(plt.Circle((0, 0), rb+8000, color=(0, 0, .5))) # Atm 8km
+for i in reversed(list_color_atm):
+    ax.add_patch(plt.Circle((0, 0), i[0], color=i[1]))
+    
 ax.add_patch(plt.Circle((0, 0), rb+20, color="w")) # Body Border
 ax.add_patch(plt.Circle((0, 0), rb, color="g")) # Body
 
-ax.scatter(list_x[:index_burning], list_y[:index_burning], s=1, color="red")
-ax.scatter(list_x[index_burning:], list_y[index_burning:], s=1, color="yellow")
+plt.plot(list_x[:index_burning], list_y[:index_burning], "red")
+plt.plot(list_x[index_burning:], list_y[index_burning:], "yellow")
 ax.axis("equal")
-# plt.plot(list_x, list_y, "blue")
 
 ax.ticklabel_format(useOffset=False, style='plain', axis='both') # remove cientific notation
 
