@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
-from math import exp, floor, pi
+from math import floor, pi
 from numpy import log as ln
 from numpy import interp
 from json import loads
 
-from sys import path
-path.append('/home/thales/Documentos/Codes/www/Vector')
-from Vector import Vector2, Vector3
+from Vector import Vector2, Vector3 # github.com/Thales625/Vector
 
 # get data
 with open("./Data/altitude.txt", "r") as f:
