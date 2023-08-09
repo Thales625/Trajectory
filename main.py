@@ -4,7 +4,7 @@ from numpy import log as ln
 from numpy import interp
 from json import loads
 
-from Vector import Vector2, Vector3 # github.com/Thales625/Vector
+from Vector import Vector2 # github.com/Thales625/Vector
 
 # get data
 with open("./Data/altitude.txt", "r") as f:
