@@ -78,6 +78,7 @@ while s_mag >= rb and t < 20000:
     t += dt
     m = mdry + max(0, mfuel)
     a = -(s/s_mag) * (GM / s_mag**2)
+
     alt = s_mag - rb
 
     v_mag = v.magnitude()
@@ -92,7 +93,7 @@ while s_mag >= rb and t < 20000:
     # drag force
     if alt < atm_depth:
         # pho = 1.113 * exp(-1.24 / 10000 * alt) # atm density
-        pho = interp(alt, altitude_data, density_data)
+        pho = float(interp(alt, altitude_data, density_data))
         k = c * pho
         a -= (k * v_mag**2 / m) * v_norm
 
