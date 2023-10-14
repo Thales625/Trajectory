@@ -23,19 +23,35 @@ with open("./Data/temperature.txt", "r") as f:
 half_pi = pi*.5
 
 # body
-g0 = 9.806
-GM = 3531600035840
-rb = 600000
+G = 6.674080324960551e-11
+mb = 5.972365131085893e+24 # Earth
+GM = G * mb       # Kerbin = 3531600035840 
+rb = 6371000      # Kerbin = 600000
+g0 = GM / rb**2
 
 # PARAMS
-isp_sea = 240
-isp_vac = 270
-thrust = 89028.625
-mdry = 1000
-mfuel = 5000
+v0 = Vector2(0, 0)
+h0 = 0 #40000
+
+'''
+isp_sea = 195
+isp_vac = 226
+thrust = 6700
+mdry = 150
+mfuel = 150
+'''
+
+# 54666
+
+isp_sea = 198
+isp_vac = 249
+thrust = 39355.6
+mdry = 819
+mfuel = 1034
+
 
 cd = 0.139
-radius = 2
+radius = 1
 
 # CONSTS
 mrate = thrust / (isp_sea*g0)
@@ -46,9 +62,11 @@ area = pi * radius**2
 c = 0.5 * cd * area
 
 # auto pilot
+auto_pilot = False
 start_turn = 100
 end_turn = 40000
 delta_turn = end_turn - start_turn
+pitch = 0#.5
 
 # graph
 list_x = []
@@ -56,8 +74,8 @@ list_y = []
 list_v = []
 
 # initializing
-s = Vector2(0, rb)
-v = Vector2(0, 0)
+s = Vector2(0, rb+h0)
+v = v0
 d = s.normalize() # direction
 
 t = 0
@@ -85,9 +103,11 @@ while s_mag >= rb and t < 20000:
     v_norm = v / (v_mag if v_mag != 0 else 1)
 
     # direction
-    if alt < start_turn: pitch = 0
-    if start_turn <= alt and alt <= end_turn: pitch = (alt-start_turn)/delta_turn
-    if alt > end_turn: 1
+    if auto_pilot:
+        if alt < start_turn: pitch = 0
+        if start_turn <= alt and alt <= end_turn: pitch = (alt-start_turn)/delta_turn
+        if alt > end_turn: 1
+
     d = Vector2(thetta=s.normalize().get_angle() - pitch * half_pi)
     
     # drag force
@@ -119,6 +139,7 @@ while s_mag >= rb and t < 20000:
 print(f"Altitude Max: {max_alt-rb}")
 print(f"Altitude MECO: {Vector2(list_x[index_burning], list_y[index_burning]).magnitude()-rb}")
 print(f"Velocity MECO: {list_v[index_burning]}")
+print(f"Downrange: {(Vector2(list_x[0], list_y[0]).get_angle() - Vector2(list_x[-1], list_y[-1]).get_angle()) * rb}")
 
 # graph
 plt.style.use("dark_background")
