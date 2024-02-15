@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from math import ceil, pi, exp
 
-from Vector import Vector2
+from PyVecs import Vector2
 
 class Body:
     def __init__(self, name, r0, v0, radius, mass, has_atmosphere=False, rho0=0, atm_h=1, color="grey") -> None:
